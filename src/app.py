@@ -6,32 +6,34 @@ import requests
 with open('styles.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# poster
+# Fetching the poster
 
-def poster(movie_id):
+
+def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=e29500185edb84e31a6780b0c7c0f7dc&language=en-US&page=1".format(
         movie_id)
-    d = requests.get(url)
-    d = data.json()
+    data = requests.get(url)
+    data = data.json()
     poster_path = data['poster_path']  # this will only a part form the path
     # to define the full path
-    path = "https://image.tmdb.org/t/p/w500/" + poster_path
+    full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
     
-    return path
+    return full_path
 
-# recommend function
+# defining the recommend function
 
-def rec(movie):
-    indx = movies[movies['title'] == movie].indx[0]
+
+def recommend(movie):
+    index = movies[movies['title'] == movie].index[0]
     distances = sorted(
-        list(enumerate(similarity[indx])), reverse=True, key=lambda x: x[1])
-    RecMovieNames = []
-    RecMoviePoster = []
+        list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
+    recommended_movies_names = []
+    recommended_movies_poster = []
     for i in distances[1:6]:
         movie_id = movies.iloc[i[0]]['movie_id']
-        RecMoviePoster.append(fetch_poster(movie_id))
-        RecMovieNames.append(movies.iloc[i[0]].title)
-    return RecMovieNames, RecMoviePoster
+        recommended_movies_poster.append(fetch_poster(movie_id))
+        recommended_movies_names.append(movies.iloc[i[0]].title)
+    return recommended_movies_names, recommended_movies_poster
 
 
 st.header("Movie Recommendation System")
@@ -42,39 +44,39 @@ similarity = pickle.load(
     open('C:/Users/DELL/Downloads/movieR/artifacts/similarity.pkl', 'rb'))
 
 
-MovieList = movies['title'].values
+movie_list = movies['title'].values
 selected_movie = st.selectbox(
     'Type or select a movie to get recommendation',
-    MovieList
+    movie_list
 )
 
 if st.button('Show recommendations'):
-    RecMovieNames, RecMoviePoster = recommend(
+    recommended_movies_names, recommended_movies_poster = recommend(
         selected_movie)
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
-        st.image(RecMoviePoster[0])
-        st.text(RecMovieNames[0])
+        st.image(recommended_movies_poster[0])
+        st.text(recommended_movies_names[0])
 
     with col2:
         
-        st.image(RecMoviePoster[1])
-        st.text(RecMovieNames[1])
+        st.image(recommended_movies_poster[1])
+        st.text(recommended_movies_names[1])
 
     with col3:
         
-        st.image(RecMoviePoster[2])
-        st.text(RecMovieNames[2])
+        st.image(recommended_movies_poster[2])
+        st.text(recommended_movies_names[2])
 
     with col4:
         
-        st.image(RecMoviePoster[3])
-        st.text(RecMovieNames[3])
+        st.image(recommended_movies_poster[3])
+        st.text(recommended_movies_names[3])
 
     with col5:
         
-        st.image(RecMoviePoster[4])
-        st.text(RecMovieNames[4])
+        st.image(recommended_movies_poster[4])
+        st.text(recommended_movies_names[4])
         
 else:
     st.write("No Movies are visible Yet")
@@ -85,7 +87,7 @@ else:
 
 
 
-# dictionary to store movie feedback
+# Create a dictionary to store movie feedback
 movie_feedback = {}
 st.markdown(
     """
