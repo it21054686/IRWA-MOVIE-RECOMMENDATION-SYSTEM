@@ -1,0 +1,22 @@
+div.appview-container.st-emotion-cache-1wrcr25.ea3mdgi6 {
+  background: radial-gradient(
+    circle at 10% 20%,
+    rgb(69, 86, 102) 0%,
+    rgb(34, 34, 34) 90%
+  );
+}
+
+div.st-emotion-cache-q8sbsg.e1nzilvr5 {
+  color: #e7dada;
+  font-family: monospace;
+  padding: 1rem;
+  animation-delay: revert;
+  font-size: -webkit-xxx-large;
+}
+
+h2 {
+  color: rgb(238, 238, 238);
+  font-size: 3rem;
+  font-family: "Source Sans Pro";
+  font-weight: bolder;
+}
